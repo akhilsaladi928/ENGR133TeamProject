@@ -36,7 +36,6 @@ Academic Integrity Statement:
 import numpy as np
 import math as m
 import matplotlib.pyplot as plt
-from PIL import Image
 from tp1_team_3_18 import create_gaussian_kernel, gaussian_filter, rgb_to_grayscale
 from tp1_team_1_18 import load_img
 
@@ -69,7 +68,7 @@ def sobel_filter(data):
                 gradient_magnituide = 255
             row.append(gradient_magnituide)
         output.append(row)
-    return(np.array(output))
+    return(np.array(output).astype(np.uint8))
 
 
 def main():
@@ -80,7 +79,7 @@ def main():
     test_image = gaussian_filter(test_image, 1)
     test_image = sobel_filter(test_image)
 
-    plt.imshow(test_image)
+    plt.imshow(test_image, cmap='gray', vmin=0, vmax=255)
     plt.show()
     return (0)
 
