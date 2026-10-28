@@ -66,31 +66,32 @@ def pad_image(resized_image_array, target_size):
     return padded_image_array
 
 
-def rgb_to_hsv(R, G, B):
-    Rp = R/255.0
-    Gp = G/255.0
-    Bp = B/255.0
-    Cmax = max([Rp, Gp, Bp])
-    Cmin = min([Rp, Gp, Bp])
-    delta = Cmax - Cmin
-    hp, sp, vp = 0, 0, 0
-    #calculate hue
-    if delta == 0.0:
-        hp = 0.0
-    elif Cmax == Rp:
-        hp = (60*(Gp-Bp)/delta)%360
-    elif Cmax == Gp:
-        hp = (60*(Bp-Rp)/delta + 120)%360
+def rgb_to_hsv(r, g, b):
+    red = float(r) / 255.0
+    green = float(g) / 255.0
+    blue = float(b) / 255.0
+
+    c_max = max(red, green, blue)
+    c_min = min(red, green, blue)
+    delta = c_max - c_min
+
+    if delta == 0:
+        hue = 0.0
+    elif c_max == red:
+        hue = (60.0 * ((green - blue) / delta) + 360.0) % 360.0
+    elif c_max == green:
+        hue = (60.0 * ((blue - red) / delta) + 120.0) % 360.0
     else:
-        hp = (60*(Rp-Gp)/delta + 240)%360
-    #calculate saturation
-    if Cmax == 0.0:
-        sp = 0.0
+        hue = (60.0 * ((red - green) / delta) + 240.0) % 360.0
+
+    if c_max == 0:
+        sat = 0.0
     else:
-        sp = delta/Cmax
-    #calculate V
-    vp = Cmax
-    return (hp*255.0/360), sp*255.0, vp*255.0
+        sat = delta / c_max
+
+    value = c_max
+
+    return hue * 255.0 / 360.0, sat * 255.0, value * 255.0
 
 #finds unique colors, indices
 #gets conversion of each unique pixel and recreates using the inverse map
