@@ -1,3 +1,4 @@
+
 """
 Course Number: ENGR 133
 Semester: Fall 2026
@@ -10,6 +11,7 @@ Description:
 Assignment Information:
     Assignment:     tp2 team 2
     Team ID:        LC4 - 18
+    Author: Akhil Saladi, asaladi@purdue.edu, Rohan Ravula, Thomas Morgan, Oscar Anderson
     Date:           9/17/2026
 
 Contributors:
@@ -33,8 +35,6 @@ Academic Integrity Statement:
 """
 
 import numpy as np
-import math as m
-import matplotlib.pyplot as plt
 import pandas as pd
 import cv2
 import os
@@ -45,11 +45,13 @@ from tp2_team_1_18 import sobel_filter
 
 
 def detect_circle(gray_img):
+    #apply gaussian filter
     blurred_img = gaussian_filter(gray_img, 1.5)
+    #turn image into numpy array
     blurred_img = np.array(blurred_img, dtype=np.uint8)
-
+    #check if there are circles
     circles = cv2.HoughCircles(blurred_img, cv2.HOUGH_GRADIENT, dp=1.2, minDist=50, param1=100, param2=30, minRadius=20, maxRadius=50)
-
+    #if there are circles return 1 for yes else 0
     if circles is None:
         return 0
     else:
@@ -57,9 +59,12 @@ def detect_circle(gray_img):
 
 
 def detect_triangle(gray_img):
+    #run gaussian filter to blur and smoother images and reduce noise
     blurred = gaussian_filter(gray_img, 1.0)
+    #run sobel filter to remove uneccessary noise and see where there are edges
     edges = sobel_filter(blurred)
 
+    #Find 3 verticied shapes
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for contour in contours:
@@ -73,10 +78,11 @@ def detect_triangle(gray_img):
 
 
 def count_lines(gray_img):
+    #run sobel filter to remove noise and detect where edges lie
     edges = sobel_filter(gray_img)
 
-    lines = cv2.HoughLinesP(
-        edges, 1, np.pi / 180, threshold=50, minLineLength=30, maxLineGap=10)
+    #check where there are lines
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=30, maxLineGap=10)
 
     if lines is None:
         return 0
@@ -85,19 +91,23 @@ def count_lines(gray_img):
 
 
 def extract_features(img_array):
+    #convert data to HSV
     hsv = convert_to_hsv(img_array)
 
-    hue_mean = float(np.mean(hsv[:, :, 0]))
-    hue_std = float(np.std(hsv[:, :, 0]))
+    #Get all the HSV statistics from color image
 
-    saturation_mean = float(np.mean(hsv[:, :, 1]))
-    saturation_std = float(np.std(hsv[:, :, 1]))
+    hue_mean = (np.mean(hsv[:, :, 0], dtype=np.float64))
+    hue_std = (np.std(hsv[:, :, 0], dtype=np.float64))
 
-    value_mean = float(np.mean(hsv[:, :, 2]))
-    value_std = float(np.std(hsv[:, :, 2]))
+    saturation_mean = (np.mean(hsv[:, :, 1], dtype=np.float64))
+    saturation_std = (np.std(hsv[:, :, 1], dtype=np.float64))
+
+    value_mean = (np.mean(hsv[:, :, 2], dtype=np.float64))
+    value_std = (np.std(hsv[:, :, 2], dtype=np.float64))
 
     gray_img = rgb_to_grayscale(img_array)
-    gray_img = np.array(gray_img, dtype=np.uint8)
+
+    #get number of lines, whether or not there's a circle or triangle from grayscaled image
 
     number_lines = int(count_lines(gray_img))
     has_circle = int(detect_circle(gray_img))
@@ -109,10 +119,11 @@ def extract_features(img_array):
 
 
 def main():
+    #get user inputs
     folder = input("Enter the name of the dataset folder: \n")
     metadata_file = input("Enter the name of the metadata file: \n")
     output_file = input("Enter the name of output csv features file: \n")
-
+    #read the metadata file
     metadata = pd.read_csv(metadata_file)
 
     print("Training Metadata DataFrame:")
@@ -125,7 +136,7 @@ def main():
                "has_triangle", "Path", "ClassId"]
 
     data = []
-
+    #go through metadata file and do feature extraction on each image
     for i in range(len(metadata)):
         image_name = metadata.loc[i, "Path"]
         class_id = metadata.loc[i, "ClassId"]
@@ -135,10 +146,18 @@ def main():
         img = load_img(image_path)
         img = (img * 255).astype(np.uint8)
 
-        img = resize_image(img, (100, 100))
-        img = pad_image(img, (100, 100))
+        height, width = img.shape[:2]
+        scale = min(100 / width, 100 / height)
 
-        features = extract_features(img)
+        new_width = max(1, int(width * scale))
+        new_height = max(1, int(height * scale))
+
+        resized = resize_image(img, (new_width, new_height))
+        padded = pad_image(resized, (100, 100))
+
+        stretched = resize_image(img, (100, 100))
+
+        features = extract_features(stretched)
 
         features.append(image_name)
         features.append(class_id)
@@ -165,8 +184,6 @@ def main():
 
     print("Features for", image_name + ":")
     print(selected)
-    print()
-    print("[1 rows x 11 columns]")
 
 if __name__ == "__main__":
     main()
