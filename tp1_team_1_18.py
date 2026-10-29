@@ -35,7 +35,6 @@ import numpy as np
 from PIL import Image, ImageOps
 import matplotlib.pyplot as plt
 
-
 #load image function from py5 team task 2
 def load_img(file_path):
     #load image and linearize it
