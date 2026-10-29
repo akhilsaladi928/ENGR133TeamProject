@@ -3,7 +3,7 @@ Course Number: ENGR 13300
 Semester: e.g. Spring 2026
 
 Description:
-    Write two functions, one to build a Gaussian kernel and one to apply it, then use them to blur a user-selected grayscale image.
+    Write two functions, one to build a Gaussian kernel and one to apply it, then use them to blur a user-selected grayscale image
 
 Assignment Information:
     Assignment:     tp1 team 3
