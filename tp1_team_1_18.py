@@ -3,7 +3,7 @@ Course Number: ENGR 13300
 Semester: Fall 2026
 
 Description:
-    Replace this line with a description of your program.
+    Beginning of our team project; conversion of rgb to hsv files, etc.
 
 Assignment Information:
     Assignment:     tp1 team 1
