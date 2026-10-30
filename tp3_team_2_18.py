@@ -38,6 +38,45 @@ Academic Integrity Statement:
 import numpy as np
 import pandas as pd
 
+#PARAMS
+#z: float or np float arr: input to the sigmoid function
+#RET
+#sigmoid: float or np float arr: output of the sigmoid function
+#PURPOSE
+#Calculates the sigmoid function for the given input.
+def calculate_sigmoid(z):
+    #return sigmoid, making sure to keep extra large vaLues between range
+    return 1 / (1 + np.exp(-np.clip(z, -10.0, 10.0)))
+
+#PARAMS
+#X: np[float][float]: feature matrix
+#w: np[float]: weight vector
+#b: float: bias term
+#RET
+#proba: np[float]: predicted probabilities
+#PURPOSE
+#Predicts the probabilities for the given feature matrix using the logistic regression model.
+def predict_proba(X, w, b):
+    #compute dot product plus added bias
+    linear_model = np.dot(X, w) + b
+    #return the values passed thru sigmoid function
+    return calculate_sigmoid(linear_model)
+
+#PARAMS
+#X: np[float][float]: feature matrix
+#w: np[float]: weight vector
+#b: float: bias term
+#threshold: float: decision threshold
+#RET
+#predicted_labels: np[int]: predicted labels
+#PURPOSE
+#Predicts the labels for the given feature matrix using the logistic regression model.
+def predict_labels(X, w, b, threshold=0.5):
+    proba = predict_proba(X, w, b)
+    predicted_labels = (proba >= threshold).astype(int)
+    return predicted_labels
+
+
 def main():
     pass
 
