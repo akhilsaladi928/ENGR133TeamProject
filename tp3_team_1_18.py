@@ -4,15 +4,15 @@ Course Number: ENGR 133
 Semester: Fall 2026
 
 Description:
-    KNN classifiers, etc. (need to update)
+    Runs through the features dataset and prepares it for training, validation, and testing using KNN classification.
 
 Assignment Information:
-    Assignment:     tp2 team 2
+    Assignment:     tp3 team 1
     Team ID:        LC4 - 18
     Author:         Akhil Saladi, asaladi@purdue.edu
                     Rohan Ravula
                     Thomas Morgan
-                    Oscar Anderson
+                    Oscar Anderson, ande2059@purdue.edu
     Date:           10/29/2026
 
 Contributors:
@@ -127,13 +127,13 @@ def knn_single_prediction(new_example, X_train, y_train, k):
 #PURPOSE
 #loop through training set to predict labels for new data points
 def predict_labels_knn(X_new, X_train, y_train, k):
-    predicted_labels = []
+    predicted_labels = np.array([], dtype=np.int64)
     #loop through each new data point and predict its label using KNN
     for i in range(len(X_new)):
             #runs single prediction on each image
             prediction = knn_single_prediction(X_new[i], X_train, y_train, k)
             #adds the predicted value (0, 1) to predicted labels
-            predicted_labels.append(prediction)
+            predicted_labels = np.append(predicted_labels, prediction)
     return(predicted_labels)
 
 #PARAMS
@@ -173,9 +173,9 @@ def main():
     
     #prints summary of set lengths
     print("\nData loaded and split into\n")
-    print("Training set:\n  size: {%d}", len(X_train))
-    print("Validation set:\n  size: {%d}", len(X_val))
-    print("Test set:\n  size: {%d}", len(X_test))
+    print(f"Training set:\n  size: {len(X_train)}")
+    print(f"Validation set:\n  size: {len(X_val)}")
+    print(f"Test set:\n  size: {len(X_test)}")
 
     #calculates the training, validation, and testing predictions and gets their corrosponding accuracy and error
     training = predict_labels_knn(X_train, X_train, y_train, kVal)
@@ -186,22 +186,22 @@ def main():
     test_accuracy, test_error = calculate_metrics(testing, y_test)
 
     #prints accuracy and error of training data
-    print("Evaluating KNN model on Training set with k = {kVal}...")
+    print(f"\nEvaluating KNN model on Training set with k = {kVal}...")
     print("\n--- Model Performance on Training Set ---")
-    print("Training Set Accuracy: {%.4f}", train_accuracy)
-    print("Training Set Error Rate: {%.4f}", train_error)
+    print(f"Training Set Accuracy: {train_accuracy:.4f}")
+    print(f"Training Set Error Rate: {train_error:.4f}")
 
     #prints accuracy and error of validation data
-    print("Evaluating KNN model on validation set with k = {kVal}...")
+    print(f"\nEvaluating KNN model on validation set with k = {kVal}...")
     print("\n--- Model Performance on Validation Set ---")
-    print("Validation Set Accuracy: {%.4f}", val_accuracy)
-    print("Validation Set Error Rate: {%.4f}", val_error) 
+    print(f"Validation Set Accuracy: {val_accuracy:.4f}")
+    print(f"Validation Set Error Rate: {val_error:.4f}") 
 
     #prints accuracy and error of testing data
-    print("Evaluating KNN model on test set with k = {kVal}...")
+    print(f"\nEvaluating KNN model on test set with k = {kVal}...")
     print("\n--- Model Performance on Test Set ---")
-    print("Test Set Accuracy: {%.4f}", test_accuracy)
-    print("Test Set Error Rate: {%.4f}", test_error)
+    print(f"Test Set Accuracy: {test_accuracy:.4f}")
+    print(f"Test Set Error Rate: {test_error:.4f}")
 
 
 if __name__ == "__main__":
