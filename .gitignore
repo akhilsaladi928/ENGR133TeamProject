@@ -3,3 +3,6 @@ img_features.csv
 venv/
 .venv/
 env/
+
+__pycache__/
+*.pyc
