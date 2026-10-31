@@ -37,7 +37,7 @@ Academic Integrity Statement:
 
 import numpy as np
 import pandas as pd
-from tp2_team_3_18 import scale_features
+from src.tp2_team_3_18 import scale_features
 
 #PARAMS
 #file_path: str: Path to csv file
