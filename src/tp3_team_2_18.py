@@ -37,7 +37,7 @@ Academic Integrity Statement:
 
 import numpy as np
 import pandas as pd
-from src.tp3_team_1_18 import load_dataset, train_val_test_split, calculate_metrics 
+from tp3_team_1_18 import load_dataset, train_val_test_split, calculate_metrics 
 
 #PARAMS
 #z: float or np float arr: input to the sigmoid function
@@ -108,7 +108,7 @@ def compute_loss_and_grads(X, y, w, b):
 #b_best: float: bias with lowest validation loss
 #loss_history: [float]: training loss at each iteration
 #val_loss_history: [float]: validation loss at each iteration
-def train_logistic_regression(X_train, y_train, X_val, y_val, learning_rate=0.01, num_iterations=1000):
+def train_logistic_regression(X_train, y_train, X_val, y_val, learning_rate=0.01, num_iterations=1000, return_best=True):
     # Initialize weights as random numbers between -0.01 and 0.01, and bias as 0
     w = np.random.randn(X_train.shape[1]) * 0.01
     b = 0.0
@@ -138,7 +138,10 @@ def train_logistic_regression(X_train, y_train, X_val, y_val, learning_rate=0.01
         #print progress every 100 iterations
         if i % 100 == 0:
             print(f"Iteration {i}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
-    return w_best, b_best, loss_history, val_loss_history
+    if return_best:
+        return w_best, b_best, loss_history, val_loss_history
+    else:
+        return w, b, loss_history, val_loss_history
 
 #PARAMS
 #X: np[float][float]: feature matrix
