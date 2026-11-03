@@ -3,10 +3,10 @@ Course Number: ENGR 133
 Semester: Fall 2026
 
 Description:
-    Evaluate both the logistic regression and KNN models 
+    Evaluate both the logistic regression and KNN models, give evaluation outputs, print the corresponding graphs
 
 Assignment Information:
-    Assignment:     Assingment
+    Assignment:     tp3 team 3
     Team ID:        LC4 - 18
     Author:         Thomas Morgan, morga487@purdue.edu
                     Oscar Anderson, ande2059@purdue.edu
@@ -35,7 +35,7 @@ Academic Integrity Statement:
 import numpy as np
 import matplotlib.pyplot as plt
 from tp3_team_1_18 import load_dataset, predict_labels_knn,  train_val_test_split, calculate_metrics
-from tp3_team_2_18 import train_logistic_regression, evaluate_logistic_regression
+from tp3_team_2_18 import calculate_sigmoid, train_logistic_regression, evaluate_logistic_regression
 
 
 #PARAMS
@@ -60,8 +60,7 @@ def evaluate_knn_model(k_values, X_train, y_train, X_val, y_val):
         #get the accuracy and error for training (should be very close to one)
         trainAccuracy, trainError = calculate_metrics(predicted_train, y_train)
         #get the accuracy and error for validation (should be lower than training)
-        valAccuracy, valError = calculate_metrics(predicted_val, y_val)\
-        #add everything to the dictionary
+        valAccuracy, valError = calculate_metrics(predicted_val, y_val)
         metrics["acc"]["train_acc"].append(trainAccuracy)
         metrics["acc"]["val_acc"].append(valAccuracy)
         metrics["error"]["train_error"].append(trainError)
@@ -71,7 +70,6 @@ def evaluate_knn_model(k_values, X_train, y_train, X_val, y_val):
 #PARAMS
 #metrics: dict: dictionary returned by KNN model
 #k_values: [int]: List of tested k values
-#RET
 #PURPOSE
 #prints a performance graph of the knn model
 def plot_knn_performance(metrics, k_values):
@@ -94,18 +92,17 @@ def plot_knn_performance(metrics, k_values):
     plt.ylabel("Error Rate")
     plt.grid(True)
 
-    plt.show
-    return()
+    plt.show()
 
 #PARAMS
-#metrics: dict: dicionary returned by KNN model
 #k_values: [int]: list of tested k values
+# #metrics: dict: dicionary returned by KNN model
 #RET
 #best_k: int: the k value with highest validation accuracy, tie is broken by lower k val
-def select_best_k(metrics, k_values):
-    #get the index of the max validation accuracy in the metrics dictionary and then get the K_value at that index in the k_values list
-    best_k = k_values[np.argmax(metrics["acc"]["val_acc"])]
-    return(best_k)
+def select_best_k(k_values, metrics):
+    val_acc = metrics["acc"]["val_acc"]
+    best_acc = max(val_acc)
+    return min(k for k, acc in zip(k_values, val_acc) if acc == best_acc)
 
 #PARAMS
 #X_test: np[float][float]: test feature matrix
@@ -131,7 +128,7 @@ def evaluate_knn_test_set(X_test, y_test, X_train, y_train, best_k):
 #w: np[float]: trarined weights
 #b: float: trained bias
 #RET
-#metrics: dict: dictionary with train, val, and test keys, all containing accuracy and error
+#metrics: dict: dictionary with train, val, and test keys, containing accuracy and error
 def evaluate_logistic_model(X_train, y_train, X_val, y_val, X_test, y_test, w, b):
     train_accuracy, train_error = evaluate_logistic_regression(X_train, y_train, w, b)
     val_accuracy, val_error = evaluate_logistic_regression(X_val, y_val, w, b)
@@ -143,11 +140,11 @@ def evaluate_logistic_model(X_train, y_train, X_val, y_val, X_test, y_test, w, b
     }
 
 #PARAMS
-#loss_history: [float]: the training loss values produced during training
-#val_loss_history: [float]: the validation loss values produced during training
+#loss_history: [float]: training loss values produced during training
+#val_loss_history: [float]: validation loss values produced during training
 #RET
 #PURPOSE
-#Plots loss vs iteration
+#Plot loss v iteration
 def plot_logistic_training(loss_history, val_loss_history):
     plt.figure(figsize=(10, 6))
     plt.plot(loss_history, label='Training Loss')
@@ -168,16 +165,15 @@ def main():
     #seed for reproducibility (shuffle and weight initialization)
     np.random.seed(seed)
 
-    #give the load function the names of the features to use
     feature_cols = ["hue_mean", "hue_std", "saturation_mean", "saturation_std", "value_mean", "value_std", "number_lines", "has_circle", "has_triangle"]
     x, y = load_dataset(path1, feature_cols, "ClassId", shufBool, seed)
 
     #splits data into seperate sections
     X_train, y_train, X_val, y_val, X_test, y_test = train_val_test_split(x, y)
     print("\nData loaded and split into\n")
-    print(f"Training set:\n\tsize: {X_train.shape[0]}")
-    print(f"Validation set:\n\tsize: {X_val.shape[0]}")
-    print(f"Test set:\n\tsize: {X_test.shape[0]}")
+    print(f"Training set:\n  size: {X_train.shape[0]}")
+    print(f"Validation set:\n  size: {X_val.shape[0]}")
+    print(f"Test set:\n  size: {X_test.shape[0]}")
     print()
     print("KNN Validation Curve Summary")        
     k_values = [1, 3, 5, 7, 9, 15, 31, 53]
@@ -185,7 +181,8 @@ def main():
     for index, k in enumerate(k_values):
         print(f"k = {k}: train accuracy = {metrics['acc']['train_acc'][index]:.4f}, validation accuracy = {metrics['acc']['val_acc'][index]:.4f}")
 
-    best_k = select_best_k(metrics, k_values)
+    best_k = select_best_k(k_values, metrics)
+
     print()
     plot_knn_performance(metrics, k_values)
     print(f"Based on the plots, the best k appears to be: {best_k}")
