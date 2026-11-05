@@ -74,24 +74,30 @@ def evaluate_knn_model(k_values, X_train, y_train, X_val, y_val):
 #prints a performance graph of the knn model
 def plot_knn_performance(metrics, k_values):
 
+    fig, ax = plt.subplots(1, 2, figsize=(12,6))
+
     #accuracy subplot
-    plt.subplot(1, 2, 1)
-    plt.plot(k_values, metrics["acc"]["train_acc"], color='cyan', marker='o', label='Training Accuracy')
-    plt.plot(k_values, metrics["acc"]["train_acc"], color='orange', marker='o', label='Validation Accuracy')
-    plt.title("Accuracy vs. Number of Neighbors (k)")
-    plt.xlabel("k (Number of Neighbors)")
-    plt.ylabel("Accuracy")
-    plt.grid(True)
+    ax[0].set_ylim(0, 1)
+    ax[0].set_xlim(-2, 55)
+    ax[0].plot(k_values, metrics["acc"]["train_acc"], color='cyan', marker='o', label='Training Accuracy')
+    ax[0].plot(k_values, metrics["acc"]["val_acc"], color='orange', marker='o', label='Validation Accuracy')
+    ax[0].set_title("Accuracy vs. Number of Neighbors (k)")
+    ax[0].set_xlabel("k (Number of Neighbors)")
+    ax[0].set_ylabel("Accuracy")
+    ax[0].grid(True)
+    ax[0].legend(loc='lower left')
 
     #error rate subplot
-    plt.subplot(1, 2, 2)
-    plt.plot(k_values, metrics["error"]["train_error"], color='cyan', marker='o', label='Training Error Rate')
-    plt.plot(k_values, metrics["error"]["val_error"], color='orange', marker='o', label='Validation Error Rate')
-    plt.title("Error Rate vs. Number of Neighbors (k)")
-    plt.xlabel("k (Number of Neighbors)")
-    plt.ylabel("Error Rate")
-    plt.grid(True)
-
+    ax[1].set_ylim(0, 1)
+    ax[1].set_xlim(-2, 55)
+    ax[1].plot(k_values, metrics["error"]["train_error"], color='cyan', marker='o', label='Training Error Rate')
+    ax[1].plot(k_values, metrics["error"]["val_error"], color='orange', marker='o', label='Validation Error Rate')
+    ax[1].set_title("Error Rate vs. Number of Neighbors (k)")
+    ax[1].set_xlabel("k (Number of Neighbors)")
+    ax[1].set_ylabel("Error Rate")
+    ax[1].grid(True)
+    plt.tight_layout()
+    plt.savefig("train_val.png")
     plt.show()
 
 #PARAMS
