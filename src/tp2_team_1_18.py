@@ -36,7 +36,7 @@ Academic Integrity Statement:
 import numpy as np
 import math as m
 import matplotlib.pyplot as plt
-from src.tp1_team_3_18 import create_gaussian_kernel, gaussian_filter, rgb_to_grayscale
+from tp1_team_3_18 import create_gaussian_kernel, gaussian_filter, rgb_to_grayscale
 from tp1_team_1_18 import load_img
 
 #Sobel matrix for the sobel calultions in the X directions

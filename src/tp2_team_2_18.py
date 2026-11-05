@@ -39,9 +39,9 @@ import pandas as pd
 import cv2
 import os
 
-from src.tp1_team_3_18 import create_gaussian_kernel, gaussian_filter, rgb_to_grayscale
+from tp1_team_3_18 import create_gaussian_kernel, gaussian_filter, rgb_to_grayscale
 from tp1_team_1_18 import load_img, resize_image, pad_image, convert_to_hsv
-from src.tp2_team_1_18 import sobel_filter
+from tp2_team_1_18 import sobel_filter
 
 
 def detect_circle(gray_img):
