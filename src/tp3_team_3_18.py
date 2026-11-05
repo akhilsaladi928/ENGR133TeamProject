@@ -201,7 +201,8 @@ def main():
     print("Training logistic regression model with learning rate = 0.01 and num_iterations = 5000...")
     print()
 
-    w, b, _, _ = train_logistic_regression(X_train, y_train, X_val, y_val, 0.01, 5000, False)
+    w, b, loss_history, val_history = train_logistic_regression(X_train, y_train, X_val, y_val, 0.01, 5000, False)
+    plot_logistic_training(loss_history, val_history)
     log_train_accuracy, log_train_error = evaluate_logistic_regression(X_train, y_train, w, b)
     log_val_accuracy, log_val_error = evaluate_logistic_regression(X_val, y_val, w, b)
     log_test_accuracy, log_test_error = evaluate_logistic_regression(X_test, y_test, w, b)
