@@ -98,7 +98,6 @@ def plot_knn_performance(metrics, k_values):
     ax[1].grid(True)
     plt.tight_layout()
     plt.savefig("train_val.png")
-    plt.show()
 
 #PARAMS
 #k_values: [int]: list of tested k values
@@ -161,7 +160,6 @@ def plot_logistic_training(loss_history, val_loss_history):
     plt.legend()
     plt.grid()
     plt.savefig('training_progress.png')
-    plt.show()
 
 
 def main():

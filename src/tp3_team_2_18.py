@@ -136,7 +136,7 @@ def train_logistic_regression(X_train, y_train, X_val, y_val, learning_rate=0.01
             w_best = w.copy()
             b_best = b
         #print progress every 100 iterations
-        if i % 100 == 0:
+        if i % 1000 == 0:
             print(f"Iteration {i}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
     if return_best:
         return w_best, b_best, loss_history, val_loss_history
