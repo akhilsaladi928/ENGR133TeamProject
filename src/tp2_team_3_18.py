@@ -34,10 +34,6 @@ Academic Integrity Statement:
 """
 
 import matplotlib
-try:
-    matplotlib.use('MacOSX')
-except ImportError:
-    matplotlib.use('Agg')
 import pandas as pd
 #pd.set_option('display.width', 80)
 import matplotlib.pyplot as plt
